@@ -1,9 +1,13 @@
-#Functions to help with coding
+#This script contains functions to help with coding
+
+# Load Packages=====================================================================================
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 from scipy.stats import chi2_contingency
+
+
 
 # EDA Function======================================================================================
 def make_grouped_barplot(df, var):
@@ -14,19 +18,8 @@ def make_grouped_barplot(df, var):
   plt.close()
   
   
-# Data Wrangling Functions==========================================================================
-## Function that simulate a case_when() [archive?]
-def name_conversion(row):
-    if pd.notna(row['name']):
-        return row['name']
-    elif pd.isna(row['f_name']) and pd.notna(row['l_name']):
-        return row['f_name'] + ' ' + row['l_name']
-    elif pd.isna(row['f_name']) and pd.isna(row['l_name']):
-        return ""
-    else:
-        return "CHECK"
   
-  
+# Data Wrangling Function===========================================================================
 ## Function for Little's MCAR test
 def littles_mcar_test(data):
   # Calculate the number of missing values in each column
@@ -57,6 +50,7 @@ def littles_mcar_test(data):
       return "Reject the null hypothesis: Missingness is not completely at random."
   else:
       return "Fail to reject the null hypothesis: Missingness is completely at random."
+
 
 
 # Feature Engineering Functions=====================================================================
