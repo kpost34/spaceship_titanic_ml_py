@@ -1,3 +1,6 @@
+# This script does initial data cleaning/wrangling and performs EDA
+
+
 # Load Libraries, Set Options, and Change WD========================================================
 ## Load libraries
 import pandas as pd
@@ -19,7 +22,7 @@ np.set_printoptions(precision=4, suppress=True)
 from pathlib import Path
 import os
 Path.cwd() #return wd; PosixPath('/Users/keithpost')
-root = '/Users/keithpost/Documents/Python/Python projects/spaceship_titanic_ml/'
+root = '/Users/keithpost/Documents/Python/Python projects/spaceship_titanic_ml_py/'
 os.chdir(root + 'code') #change wd
 Path.cwd() #returns new wd
 
