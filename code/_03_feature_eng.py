@@ -11,7 +11,7 @@ import pickle
 import seaborn as sns
 import statsmodels.api as sm
 import pylab
-from sklearn import preprocessing
+from sklearn.preprocessing import MinMaxScaler
 from sklearn.preprocessing import OneHotEncoder
 
 
@@ -62,6 +62,7 @@ nums = ['age', 'room_service', 'food_court', 'shopping_mall', 'spa', 'vr_deck', 
 'cabin_size']
 
 df_corr = df[nums].corr()
+df_corr_signif = df_corr.map(lambda x: '{:.3g}'.format(x)).reset_index().rename(columns={'index': 'variable'})
 
 df_corr_filt = df_corr[(df_corr > 0.9) & (df_corr < 1)]
 df_corr_filt = df_corr[df_corr > 0.9]
@@ -72,7 +73,7 @@ df_corr_filt #no values--no highly correlated values (only diagonal values are 1
 # Feature Scaling===================================================================================
 ## Make qqplots of numerical variables: 
 ### Create grid of subplots
-fig, axes = plt.subplots(2, 4)
+fig, axes = plt.subplots(2, 4, figsize=(8, 6))
 
 
 ### Plot qqplots for each numerical predictor
@@ -83,25 +84,24 @@ for i, column_name in enumerate(nums):
     sm.qqplot(df[column_name], line='s', ax=ax)
     ax.set_title(f'{column_name}')
 
+fig_qqplots = fig
 
 ### Adjust layout and display plot
 plt.tight_layout()
-plt.show()
+plt.show(fig_qqplots)
 plt.close()
 #clearly we see issues with normality, and there are different scales, so this sets up well
-    #for standardization
+    #for normalization (min-max scaling)
 
 
-## Apply standardization
+## Apply normalization
 X_train = df[nums].to_numpy()
-scaler= preprocessing.StandardScaler().fit(X_train)
+scaler= MinMaxScaler().fit(X_train)
 scaler
-scaler.mean_
-scaler.scale_
 X_scaled = scaler.transform(X_train)
 
-X_scaled.mean(axis=0) #mean = 0
-X_scaled.std(axis=0) #variance = 1
+X_scaled.min(axis=0) #min = 0
+X_scaled.max(axis=0) #max = 1
 
 df_nums = pd.DataFrame(X_scaled, columns=nums)
 
@@ -126,7 +126,7 @@ df_cats_n = df_cats_n.rename(columns={'value': 'category', 'size': 'count'})
 colors = ['blue', 'green', 'red', 'purple', 'orange', 'black']
 
 ### Create a subplot grid
-fig, axes = plt.subplots(2, 3)
+fig, axes = plt.subplots(2, 3, figsize=(8.5, 7))
 
 ### Build each subplot using a for loop
 for i, variable in enumerate(cats):
@@ -148,12 +148,17 @@ for i, variable in enumerate(cats):
   axes[row, col].set_xlabel('Category')
   axes[row, col].set_ylabel('Count')
   axes[row, col].set_title(f'{variable}')
+  
+axes[1, 1].tick_params(axis='x', rotation=45)
+axes[1, 2].tick_params(axis='x', rotation=45)
 
 ### Adjust spacing between subplots
 plt.subplots_adjust(wspace=0.05, hspace=0.05)  
 
+fig_rle = fig
+
 plt.tight_layout()
-plt.show()
+plt.show(fig_rle)
 plt.close() 
 #this shows that ticket and deck have rare categories (< 2%; 174)
 
@@ -219,11 +224,18 @@ df_final = pd.concat([df_id, df_nums, df_cats_encoded, df_bools, df_tv], axis=1)
 df_final.info()
 
 
+## Turn column names into DF for report
+final_col_nm = df_final.columns[0:36]
+ar_final_col_nm = np.array(final_col_nm).reshape(9, 4)
+df_reshaped_col_nm = pd.DataFrame(ar_final_col_nm, columns=["", "", "", ""])
+df_reshaped_col_nm
+
+
 # Save Data to File=================================================================================
 #save in pickle format to retain data types and categories
-afile = open('train_final.pkl', 'wb')
-pickle.dump(df_final, afile)
-afile.close()
+# afile = open('train_final.pkl', 'wb')
+# pickle.dump(df_final, afile)
+# afile.close()
 
 
 
