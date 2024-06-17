@@ -53,8 +53,9 @@ df_predict.columns = ['PassengerId', 'Transported']
 # Write to File=====================================================================================
 os.chdir(root + 'data') 
 df_predict.to_csv('predicted_transported.csv', index=False)
-#.73299, which indicates evidence of overfitting (because this model had an accuracy score of
-  #.8004 on training data)
-
+#.79915; accuracy was .801 on training data
+#ranks 895/2240 and leader has accuracy of 0.82815
+#this indicates strong performance on unseen data which captures the underlying data patterns
+#low-moderate bias and variance and thus not under- or overfitting data
 
 
