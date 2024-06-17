@@ -48,6 +48,7 @@ import _03_feature_eng as _03
 
 ## Background
 
+This project comes from the Kaggle competiton *Spaceship Titanic*. In this dataset, there are about 13,000 passengers, which are spit into roughly two-thirds (~8700) and one-third (~4300) partitions to form the training and test datasets, respectively. The training data consists of an identifier (*passenger_id*), 12 explanatory variables (of mixed types), and a Boolean target variable, *transported*, which indicates whether a passenger was transported to another dimension following the *Spaceship Titanic's* collision during its maiden voyage. The objective is to build a machine learning algorithm using the training data to accurately predict *transported* status using the test data. 
 
 ## I. Initial Wrangling
 
