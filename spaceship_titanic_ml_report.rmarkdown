@@ -1,0 +1,119 @@
+---
+title: "Spaceship Titanic Machine Learning"
+author: "Keith Post"
+date: "2024-06-16"
+execute:
+  echo: false
+  warning: false
+  message: false
+format: html
+editor: visual
+engine: knitr
+---
+
+```{python setup, results='hide'}
+
+#import packages
+from pathlib import Path
+import os
+import sys
+import datatable as dt
+
+#change wd
+root = '/Users/keithpost/Documents/Python/Python projects/spaceship_titanic_ml_py/'
+code_dir = Path(root) / 'code'
+os.chdir(code_dir) 
+new_cwd = Path.cwd()
+sys.path.append(str(code_dir))
+
+
+#source other scripts
+import _01_data_initial_clean_check_eda as _01
+
+# import _02_missing_imputation
+# import _03_feature_eng
+# # import _04_data_part_modelling
+# import _05_prep_test_data
+# import _06_evaluate_model
+
+```
+
+
+
+## Background
+
+
+## I. Initial Wrangling
+
+
+```{python}
+
+dt.Frame(_01.df0)
+
+```
+
+
+
+
+## II. Exploratory Data Analysis
+### A. Univariate
+
+
+
+
+### B. Bivariate
+
+
+
+## III. Discretize *num* variable
+
+
+
+## IV. Create New 'Size' Variables
+
+
+## V. Data Imputation
+### A. Assess missingness
+
+
+### B. Impute values
+
+
+
+## VI. Feature Engineering and Selection
+### A. Check for multicollinearity
+
+
+
+### B. Feature scaling
+
+
+### C. Rare label encoding
+
+
+### D. One-hot encoding
+
+
+## VII. Modelling
+### A. Fit models to training data
+
+
+### B. Hyperparameter tuning and model selection
+
+
+### C. Diagnostics
+
+
+## VIII. Prepare Test Data
+
+[describe what I did but no visuals needed]
+
+
+
+## IX. Model Evaluation
+
+
+
+
+
+
