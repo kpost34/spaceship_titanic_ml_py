@@ -6,14 +6,21 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 from scipy.stats import chi2_contingency
-
+# from IPython.display import display, HTML
+import datatable as dt
+import IPython.display as ipd
 
 
 # EDA Function======================================================================================
-def make_grouped_barplot(df, var):
+def make_grouped_barplot(df, var, ord=None, rot=0):
   df_var_plot = df[df['variable'] == var]
-  p_var = sns.catplot(x="category", y="count", kind="bar", hue="transported", data=df_var_plot)
+  p_var = sns.catplot(x="category", y="count", kind="bar", hue="transported", data=df_var_plot,
+                      order=ord)
   p_var.set_axis_labels(x_var=var.title(), y_var="Number")
+  p_var.set_xticklabels(rotation=rot)
+  
+  p_var=sns.move_legend(p_var, loc="lower center", bbox_to_anchor=(.5, -.18), ncol=2)
+
   plt.show()
   plt.close()
   
@@ -71,5 +78,23 @@ def group_categories(variable, rare_cats, new_cat):
     return variable
 
 
+
+# Report Functions==================================================================================
+## DT-related functions
+### Function to generate a simple DT
+def create_simple_dt(df, head=True):
+  # Convert the pandas dataframe to a datatable Frame
+  dt_frame = dt.Frame(df)
+
+  # Remove row numbers/indexes
+  dt_frame.key = None
+
+  # Convert datatable Frame to pandas DataFrame for HTML rendering
+  pd_df = dt_frame.to_pandas()
+
+  # Generate HTML without index
+  html = pd_df.to_html(index=False, header=head)
+
+  return ipd.HTML(html)
 
 
