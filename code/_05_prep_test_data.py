@@ -11,7 +11,7 @@ import inflection
 import numpy as np
 import pickle
 from sklearn.impute import SimpleImputer
-from sklearn import preprocessing
+from sklearn.preprocessing import MinMaxScaler
 from sklearn.preprocessing import OneHotEncoder
 
 
@@ -184,15 +184,15 @@ df.info() #no NA values
 
 
 # Feature Scaling===================================================================================
-#apply standardization
+#apply normalization (min-max scaling)
 del nums
 nums = ['age', 'room_service', 'food_court', 'shopping_mall', 'spa', 'vr_deck', 'group_size',
 'cabin_size']
 
-X_train = df[nums].to_numpy()
-scaler= preprocessing.StandardScaler().fit(X_train)
+X_test = df[nums].to_numpy()
+scaler= MinMaxScaler().fit(X_test)
 scaler
-X_scaled = scaler.transform(X_train)
+X_scaled = scaler.transform(X_test)
 
 df_nums = pd.DataFrame(X_scaled, columns=nums)
 
@@ -249,9 +249,9 @@ df_final.info()
 
 # Save Data to File=================================================================================
 #save in pickle format to retain data types and categories
-afile = open('test_prepped.pkl', 'wb')
-pickle.dump(df_final, afile)
-afile.close()
+# afile = open('test_prepped.pkl', 'wb')
+# pickle.dump(df_final, afile)
+# afile.close()
 
 
 
