@@ -61,19 +61,19 @@ X = df0.drop(['passenger_id', 'transported'], axis=1).to_numpy()
 ### Evaluate using entire training set
 mod_logreg = LogisticRegression() #create model
 scores_logreg = cross_val_score(mod_logreg, X, y, cv=5)
-scores_logreg.mean() #.7862
+scores_logreg.mean() #.767
 
 
 ## Decision tree-------------------------
 mod_dt = DecisionTreeClassifier()
 scores_dt = cross_val_score(mod_dt, X, y, cv=5)
-scores_dt.mean() #.7223
+scores_dt.mean() #.725
 
 
 ## Random forest-------------------------
 mod_rf = RandomForestClassifier()
 scores_rf = cross_val_score(mod_rf, X, y, cv=5)
-scores_rf.mean() #.7913
+scores_rf.mean() #.794
 
 #choose logistic regression and random forest models for tuning
 
@@ -107,25 +107,9 @@ df_results_logreg = pd.DataFrame({
 
 # View(df_results_logreg)
 
-grid_logreg.best_score_ #.7918
+grid_logreg.best_score_ #.788
 grid_logreg.best_params_
-# {'C': 0.1, 'max_iter': 500, 'penalty': 'l1', 'solver': 'saga'}
-#moderate C, within 500 iterations for convergence, ridge regularization, saga is used in L1
-  # regularization
-
-#regularization: used to prevent overfitting; adds penalty term to model's loss function to encourage 
-  #it to learn simpler patterns and reduces complexity of learned relationships between features
-  #and target variable: 
-  #L1 regularization: penalty term = sum of abs values of coefficients of model; encourages model
-    #sparsity--coefficients close to 0; helpful with high-d datasets or when irrelevant features
-    #should be disregarded
-  #L2: penalty term = sum of squared values of the model coefficients; penalized large coeffs more
-    #than small ones; tends to distribute weights more evenly across all features
-  
-#saga is well-suited for problems with L1 regularization and can handle both sparse & dense data
-
-#note: liblinear: efficient for relatively small samples and set of features; can specify either L1
-  #or L2 regularization, can also handle sparse data and large numbers of features
+# {'C': 100, 'max_iter': 100, 'penalty': 'l2', 'solver': 'liblinear'}
   
 
 ## Random forest model-------------------------
@@ -152,13 +136,18 @@ df_results_rf = pd.DataFrame({
 
 # View(df_results_rf)
 
-grid_rf.best_score_ #.8004
+grid_rf.best_score_ #.801
 grid_rf.best_params_
-# {'min_samples_leaf': 5, 'min_samples_split': 2, 'n_estimators': 100}
+# {'min_samples_leaf': 2, 'min_samples_split': 10, 'n_estimators': 500}
 
 
 
 # Finalize Model and Perform Diagnostics============================================================
+## Change WD
+os.chdir(root + 'modelling') 
+Path.cwd()
+
+
 ## Select best model
 best_model_rf = grid_rf.best_estimator_
 
@@ -174,6 +163,9 @@ sns.heatmap(conf_matrix, annot=True, fmt='d', cmap='Blues')
 plt.xlabel('Predicted Labels')
 plt.ylabel('True Labels')
 plt.title('Confusion Matrix')
+
+# plt.savefig('confusion_matrix.png') #saves confusion matrix to file
+
 plt.show()
 plt.close()
 
@@ -192,27 +184,26 @@ df_feat_import_sorted = df_feat_import.sort_values(by='Importance', ascending=Fa
 df_feat_import_sorted
 
 #plot them
+plt.figure(figsize=(7,7))
 plt.barh(df_feat_import_sorted['Feature'], df_feat_import_sorted['Importance'], color='royalblue')
 plt.xlabel('Importance')
 plt.ylabel('Feature')
 plt.title('Feature Importances')
 plt.gca().invert_yaxis()  
 plt.tight_layout()
+
+# plt.savefig('feature_importance.png')
+
 plt.show()
 plt.close()
 
 
 
 # Write Modelling Objects to Files==================================================================
-## Change WD
-os.chdir(root + 'modelling') 
-Path.cwd()
-
-
-## Save in pickle format to retain data types and categories
-afile = open('best_model_rf.pkl', 'wb')
-pickle.dump(best_model_rf, afile)
-afile.close()
+## Save final model in pickle format to retain data types and categories
+# afile = open('best_model_rf.pkl', 'wb')
+# pickle.dump(best_model_rf, afile)
+# afile.close()
 
 
 
