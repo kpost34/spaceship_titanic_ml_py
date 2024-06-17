@@ -115,7 +115,7 @@ df_nums_tv = df_nums.merge(df[['passenger_id', 'transported']], how="left", on="
 #with matplotlib
 df.describe()
 
-fig, axes = plt.subplots(2, 3)
+fig, axes = plt.subplots(2, 3, figsize=(7, 6))
 
 axes[0, 0].hist(df.age, color="blue")
 axes[0, 1].hist(df.room_service, color="green") 
@@ -131,12 +131,16 @@ axes[1, 0].set(xlabel="shopping_mall", ylabel="count")
 axes[1, 1].set(xlabel="spa", ylabel="count")
 axes[1, 2].set(xlabel="vr_deck", ylabel="count")
 
-plt.show() 
+plt.tight_layout()
+
+fig_num = fig 
+
+plt.show(fig_num) 
 plt.close() 
 
 
 ### Categorical data (barplots of counts)---------------
-fig, axes = plt.subplots(2, 3)
+fig, axes = plt.subplots(2, 3, figsize=(7, 6))
 
 axes[0, 0].bar(x=df['ticket'].value_counts().index,
                height=df['ticket'].value_counts(), color="blue")
@@ -156,12 +160,18 @@ axes[0, 2].set(xlabel="deck", ylabel="count")
 axes[1, 0].set(xlabel="side", ylabel="count")
 axes[1, 1].set(xlabel="destination", ylabel="count")
 
-plt.show()
+axes[1, 1].tick_params(axis='x', rotation=45)
+
+plt.tight_layout()
+
+fig_cat = fig
+
+plt.show(fig_cat)
 plt.close()
 
 
 ### Boolean data (barplots of counts)---------------
-fig, axes = plt.subplots(1, 2)
+fig, axes = plt.subplots(1, 2, figsize=(4, 3))
 
 axes[0].bar(x=df['cryo_sleep'].value_counts().index,
                height=df['cryo_sleep'].value_counts(), color="blue")
@@ -170,7 +180,11 @@ axes[1].bar(x=df['vip'].value_counts().index,
                
 axes[0].set(xlabel="cryo_sleep", ylabel="count")
 axes[1].set(xlabel="vip", ylabel="count")
-               
+
+plt.tight_layout()
+        
+fig_bool = fig
+
 plt.show()
 plt.close()
 
@@ -178,16 +192,19 @@ plt.close()
 ## Bivariate plots (predictor-target)-------------------------
 ### Numerical data (boxplots)---------------
 #linear scale
-sns.catplot(x="transported", y="value", kind="box", row="variable", hue='transported',
-            data=df_nums_tv, sharey=False)
+sns.catplot(x="transported", y="value", kind="box", col="variable", hue='transported',
+            data=df_nums_tv, sharey=False, col_wrap=3)
 plt.show()
 plt.close()
 #all but age need a pseudo-log scale
 
 #try log scale
-p = sns.catplot(x="transported", y="value", kind="box", row="variable", hue='transported',
-            data=df_nums_tv, sharey=False)
+p = sns.catplot(x="transported", y="value", kind="box", col="variable", hue='transported',
+            data=df_nums_tv, sharey=False, col_wrap=3)
 p.set(yscale="log")
+p._legend.remove()
+
+plt.tight_layout()
 plt.show()
 plt.close()
 #unsure if that's right...let's check
@@ -241,12 +258,10 @@ make_grouped_barplot(df=df_bools_tv_n, var='vip')
 
 
 # Save Data to File=================================================================================
-# df.to_csv('train_initial_clean.csv', index=False)
-
 #save in pickle format to retain data types and categories
-afile = open('train_initial_clean.pkl', 'wb')
-pickle.dump(df, afile)
-afile.close()
+# afile = open('train_initial_clean.pkl', 'wb')
+# pickle.dump(df, afile)
+# afile.close()
 
 
 
