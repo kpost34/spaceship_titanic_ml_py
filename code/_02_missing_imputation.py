@@ -125,9 +125,9 @@ df_floors_tv_n = df_floors_tv_n.rename(columns={'value': 'category', 'size': 'co
 
 #generate plots
 make_grouped_barplot(df=df_floors_tv_n, var='floor')
-make_grouped_barplot(df=df_floors_tv_n, var='floor_2')
-make_grouped_barplot(df=df_floors_tv_n, var='floor_3') 
-make_grouped_barplot(df=df_floors_tv_n, var='floor_4') 
+make_grouped_barplot(df=df_floors_tv_n, var='floor_2', ord=floor_2_lab)
+make_grouped_barplot(df=df_floors_tv_n, var='floor_3', ord=floor_3_lab) 
+make_grouped_barplot(df=df_floors_tv_n, var='floor_4', ord=floor_4_lab) 
 #choose this: fewest categories & large discrepancies
 #will need to change order of labels on plot
 
@@ -271,6 +271,11 @@ df_fs.info()
 
 #by columns
 df_fs.isna().sum(axis=0).head(25)
+
+dict_miss = {'index': 'variable', 0: 'n_missing'}
+df_fs_report = df_fs.isna().sum(axis=0).sort_values(ascending=False).to_frame().reset_index().rename(
+    columns=dict_miss)
+df_fs_report=df_fs_report[df_fs_report['n_missing']>0]
 #given that so many columns have missing values, assessing visually is difficult so let's use a 
   #statistical test
 
@@ -344,9 +349,9 @@ df_fs_imp.info()
 
 # Save Data to File=================================================================================
 #save in pickle format to retain data types and categories
-afile = open('train_impute.pkl', 'wb')
-pickle.dump(df_fs_imp, afile)
-afile.close()
+# afile = open('train_impute.pkl', 'wb')
+# pickle.dump(df_fs_imp, afile)
+# afile.close()
 
 
 
